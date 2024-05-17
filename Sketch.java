@@ -5,7 +5,8 @@ public class Sketch extends PApplet {
   // Related arrays for the (x, y) coordinated of the snowflakes
   float[] snowX = new float[42];
   float[] snowY = new float[42];
-  int intsnowDiameter = 10;
+  int intsnowDiameter = 15;
+  boolean[] blnHideStatus = new boolean[42];
 
   // Circle position variables
   float characterX = 100;
@@ -35,11 +36,14 @@ public class Sketch extends PApplet {
   }
 
   public void draw() {
+    // Game over end screen
     if (intLives == 0) {
       background(255);
-      text("Game Over", 50, 50);
+      textSize(50);
+      text("Game Over", 85, 200);
     }
 
+    // Draws while game is still continuing
     else {
     background(0);
 
@@ -47,15 +51,18 @@ public class Sketch extends PApplet {
     if (blnUpKeyCircle) {
       characterY -=2 ;
     }
+
     if (blnDownKeyCircle) {
       characterY += 2;
     }
+
     if (blnLeftKeyCircle) {
       characterX -= 2;
     }
+
     if (blnRightKeyCircle) {
       characterX += 2;
-  }
+    }
 
   // Draw blue circle player
   fill(52, 61, 235);
@@ -73,6 +80,7 @@ public class Sketch extends PApplet {
   // All other defined methods are written below:
   public void snow() {
     for (int i = 0; i < snowX.length; i+=2) {
+      if (!blnHideStatus[i]) {
       circle(snowX[i], snowY[i], intsnowDiameter);
 
       snowY[i] += 2;
@@ -92,6 +100,7 @@ public class Sketch extends PApplet {
           snowY[i] -= 1;
         }
       }
+
       // Collision detection with player
       if (dist(snowX[i], snowY[i], characterX, characterY) < intsnowDiameter / 2 + 10) {
         snowY[i] = 0;
@@ -102,18 +111,22 @@ public class Sketch extends PApplet {
       }
     }
   }
+  }
 
   // Handles multiple key inputs for character movement
   public void keyPressed() {
     if (key == 'w') {
       blnUpKeyCircle = true;
     }
+
     else if (key == 's') {
       blnDownKeyCircle = true;
     }
+
     else if (key == 'a') {
       blnLeftKeyCircle = true;
     }
+
     else if (key == 'd') {
       blnRightKeyCircle = true;
     }
@@ -123,14 +136,25 @@ public class Sketch extends PApplet {
     if (key == 'w') {
       blnUpKeyCircle = false;
     }
+
     else if (key == 's') {
       blnDownKeyCircle = false;
     }
+
     else if (key == 'a') {
       blnLeftKeyCircle = false;
     }
+
     else if (key == 'd') {
       blnRightKeyCircle = false;
+    }
+  }
+
+  public void mousePressed() {
+    for (int i = 0; i < snowX.length; i++) {
+      if (dist(snowX[i], snowY[i], mouseX, mouseY) < intsnowDiameter) {
+        blnHideStatus[i] = true;
+      }
     }
   }
 
