@@ -49,7 +49,7 @@ public class Sketch extends PApplet {
     // Generate random x and y values for snowflakes
     for (int i = 0; i < snowX.length; i++) {
       snowX[i] = random(width);
-      snowY[i] = random(height);
+      snowY[i] = random(-height, 0);
     }
   }
 
@@ -115,11 +115,12 @@ public class Sketch extends PApplet {
         SnowDiamter[i] = 20;
         circle(snowX[i], snowY[i], SnowDiamter[i]);
 
-        snowY[i]++;
+        snowY[i] += 2;
 
         // Reset snowflakes
         if (snowY[i] > height) {
-          snowY[i] = -10;
+          snowY[i] = random(-height, 0);
+          snowX[i] = random(width);
         }
 
         // Slows down for up arrow pressed and speeds for down arrow pressed
