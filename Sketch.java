@@ -195,7 +195,7 @@ public class Sketch extends PApplet {
   public void mousePressed() {
     for (int i = 0; i < snowX.length; i++) {
       if (dist(snowX[i], snowY[i], mouseX, mouseY) < SnowDiamter[i]) {
-        snowY[i] =- 10;  // Reset the snowflake's Y position to the top
+        blnHideStatus[i] = true;
       }
     }
   }
