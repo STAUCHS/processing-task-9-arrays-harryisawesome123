@@ -1,11 +1,18 @@
 import processing.core.PApplet;
 
+/**
+ * A program Sketch.java that draws a game with a moveable blue circle. Snowflakes fall from the top.
+ * each collision removes a life and once three collisions occur the game ends to a white screen.
+ * 
+ * @author H. Rahukulan
+ */
+
 public class Sketch extends PApplet {
 
   // Related arrays for the (x, y) coordinated of the snowflakes
   float[] snowX = new float[42];
   float[] snowY = new float[42];
-  int intsnowDiameter = 15;
+  int intSnowDiameter = 15;
   boolean[] blnHideStatus = new boolean[42];
 
   // Circle position variables
@@ -21,10 +28,21 @@ public class Sketch extends PApplet {
   // Lives variable
   int intLives = 3;
 
+  /**
+   * Called once at the beginning of execution.
+   * 
+   * @author H. Rahukulan
+   */
   public void settings() {
     size(400, 400);
   }
 
+  /**
+   * Called once at the beginning of execution.  Add initial set up
+   * values here i.e background, stroke, fill etc.
+   * 
+   * @author H. Rahukulan
+   */
   public void setup() {
     background(0);
 
@@ -35,6 +53,11 @@ public class Sketch extends PApplet {
     }
   }
 
+  /**
+   * Called repeatedly, anything drawn to the screen goes here.
+   * 
+   * @author H. Rahukulan
+   */
   public void draw() {
     // Game over end screen
     if (intLives == 0) {
@@ -45,75 +68,82 @@ public class Sketch extends PApplet {
 
     // Draws while game is still continuing
     else {
-    background(0);
+      background(0);
 
-    // Moves Circle
-    if (blnUpKeyCircle) {
-      characterY -=2 ;
+      // Moves Circle
+      if (blnUpKeyCircle) {
+        characterY -=2 ;
+      }
+
+      if (blnDownKeyCircle) {
+        characterY += 2;
+      }
+
+      if (blnLeftKeyCircle) {
+        characterX -= 2;
+      }
+
+      if (blnRightKeyCircle) {
+        characterX += 2;
+      }
+      
+      // Draw blue circle player
+      fill(52, 61, 235);
+      ellipse(characterX, characterY, 20, 20);
+      
+      // Draw Snow
+      fill(255);
+      snow();
+
+      // Draw lives
+      drawLives();
     }
-
-    if (blnDownKeyCircle) {
-      characterY += 2;
-    }
-
-    if (blnLeftKeyCircle) {
-      characterX -= 2;
-    }
-
-    if (blnRightKeyCircle) {
-      characterX += 2;
-    }
-
-  // Draw blue circle player
-  fill(52, 61, 235);
-  ellipse(characterX, characterY, 20, 20);
-
-  // Draw Snow
-  fill(255);
-  snow();
-
-  // Draw lives
-  drawLives();
   }
-}
 
-  // All other defined methods are written below:
+  /**
+   * Checks for collisions with blue circle player and changes snowflake positions.
+   * 
+   * @author H. Rahukulan
+   */
   public void snow() {
     for (int i = 0; i < snowX.length; i+=2) {
       if (!blnHideStatus[i]) {
-      circle(snowX[i], snowY[i], intsnowDiameter);
+        circle(snowX[i], snowY[i], intSnowDiameter);
+        snowY[i]++;
 
-      snowY[i] += 2;
-
-      // Reset snowflakes
-      if (snowY[i] > height) {
-        snowY[i] = 0;
-      }
-
-      // Slows down for up arrow pressed and speeds for down arrow pressed
-      if (keyPressed) {
-        if (keyCode == DOWN) {
-          snowY[i] += 1;
+        // Reset snowflakes
+        if (snowY[i] > height) {
+          snowY[i] = 0;
         }
 
-        else if (keyCode == UP) {
-          snowY[i] -= 1;
-        }
-      }
+        // Slows down for up arrow pressed and speeds for down arrow pressed
+        if (keyPressed) {
+          if (keyCode == DOWN) {
+            snowY[i] += 1;
+          }
 
-      // Collision detection with player
-      if (dist(snowX[i], snowY[i], characterX, characterY) < intsnowDiameter / 2 + 10) {
-        snowY[i] = 0;
-        intLives--;
-        if (intLives == 0) {
-          background(255);
+          else if (keyCode == UP) {
+            snowY[i] -= 1;
+          }
+        }
+
+        // Collision detection with player
+        if (dist(snowX[i], snowY[i], characterX, characterY) < intSnowDiameter / 2 + 10) {
+          snowY[i] = 0;
+          intLives--;
+          if (intLives == 0) {
+            background(255);
+          }
         }
       }
     }
   }
-  }
 
-  // Handles multiple key inputs for character movement
+  /**
+   * Handles player movement using wasd keys.
+   * 
+   * @author H. Rahukulan
+   */
   public void keyPressed() {
     if (key == 'w') {
       blnUpKeyCircle = true;
@@ -132,6 +162,11 @@ public class Sketch extends PApplet {
     }
   }
   
+  /**
+   * Handles player movement using wasd keys.
+   * 
+   * @author H. Rahukulan
+   */
   public void keyReleased() {
     if (key == 'w') {
       blnUpKeyCircle = false;
@@ -150,14 +185,24 @@ public class Sketch extends PApplet {
     }
   }
 
+  /**
+   * Handles snowflake removal on mouse click.
+   * 
+   * @author H. Rahukulan
+   */
   public void mousePressed() {
     for (int i = 0; i < snowX.length; i++) {
-      if (dist(snowX[i], snowY[i], mouseX, mouseY) < intsnowDiameter) {
+      if (dist(snowX[i], snowY[i], mouseX, mouseY) < intSnowDiameter) {
         blnHideStatus[i] = true;
       }
     }
   }
 
+  /**
+   * Handles lives of player.
+   * 
+   * @author H. Rahukulan
+   */
   public void drawLives() {
     fill(255, 0, 0);
     for (int i = 0; i < intLives; i++) {
