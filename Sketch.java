@@ -119,8 +119,8 @@ public class Sketch extends PApplet {
 
         // Reset snowflakes
         if (snowY[i] > height) {
-          snowY[i] = random(-height, 0);
-          snowX[i] = random(width);
+          snowY[i] =- 10;
+          snowX[i] = random(0, width);
         }
 
         // Slows down for up arrow pressed and speeds for down arrow pressed
@@ -130,7 +130,7 @@ public class Sketch extends PApplet {
           }
 
           else if (keyCode == UP) {
-            snowY[i] -= 0.5;
+            snowY[i] -= 1;
           }
         }
 
@@ -138,6 +138,7 @@ public class Sketch extends PApplet {
         if (dist(snowX[i], snowY[i], characterX, characterY) < SnowDiamter[i] / 2 + 10) {
           snowY[i] = 0;
           intLives--;
+          blnHideStatus[i] = true;
           if (intLives == 0) {
             background(255);
           }
@@ -194,7 +195,7 @@ public class Sketch extends PApplet {
   }
 
   /**
-   * Handles snowflake repositioning on mouse click.
+   * Handles snowflake disappearance on mouse click.
    * 
    * @author H. Rahukulan
    */
