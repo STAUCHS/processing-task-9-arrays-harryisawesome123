@@ -87,6 +87,10 @@ public class Sketch extends PApplet {
         characterX += 2;
       }
       
+      // Keeping blue player circle on the screen
+      characterX = constrain (characterX, 0, width - 20);
+      characterY = constrain (characterY, 0, height - 20);
+
       // Draw blue circle player
       fill(52, 61, 235);
       ellipse(characterX, characterY, 20, 20);
@@ -115,7 +119,7 @@ public class Sketch extends PApplet {
 
         // Reset snowflakes
         if (snowY[i] > height) {
-          snowY[i] = 0;
+          snowY[i] = -10;
         }
 
         // Slows down for up arrow pressed and speeds for down arrow pressed
@@ -147,6 +151,7 @@ public class Sketch extends PApplet {
    * @author H. Rahukulan
    */
   public void keyPressed() {
+
     if (key == 'w') {
       blnUpKeyCircle = true;
     }
