@@ -12,7 +12,7 @@ public class Sketch extends PApplet {
   // Related arrays for the (x, y) coordinated of the snowflakes
   float[] snowX = new float[42];
   float[] snowY = new float[42];
-  int intSnowDiameter = 15;
+  float[] SnowDiamter = new float[42];
   boolean[] blnHideStatus = new boolean[42];
 
   // Circle position variables
@@ -72,7 +72,7 @@ public class Sketch extends PApplet {
 
       // Moves Circle
       if (blnUpKeyCircle) {
-        characterY -=2 ;
+        characterY -= 2 ;
       }
 
       if (blnDownKeyCircle) {
@@ -108,7 +108,9 @@ public class Sketch extends PApplet {
   public void snow() {
     for (int i = 0; i < snowX.length; i+=2) {
       if (!blnHideStatus[i]) {
-        circle(snowX[i], snowY[i], intSnowDiameter);
+        SnowDiamter[i] = 20;
+        circle(snowX[i], snowY[i], SnowDiamter[i]);
+
         snowY[i]++;
 
         // Reset snowflakes
@@ -123,12 +125,12 @@ public class Sketch extends PApplet {
           }
 
           else if (keyCode == UP) {
-            snowY[i] -= 1;
+            snowY[i] -= 0.5;
           }
         }
 
         // Collision detection with player
-        if (dist(snowX[i], snowY[i], characterX, characterY) < intSnowDiameter / 2 + 10) {
+        if (dist(snowX[i], snowY[i], characterX, characterY) < SnowDiamter[i] / 2 + 10) {
           snowY[i] = 0;
           intLives--;
           if (intLives == 0) {
@@ -186,14 +188,14 @@ public class Sketch extends PApplet {
   }
 
   /**
-   * Handles snowflake removal on mouse click.
+   * Handles snowflake repositioning on mouse click.
    * 
    * @author H. Rahukulan
    */
   public void mousePressed() {
     for (int i = 0; i < snowX.length; i++) {
-      if (dist(snowX[i], snowY[i], mouseX, mouseY) < intSnowDiameter) {
-        blnHideStatus[i] = true;
+      if (dist(snowX[i], snowY[i], mouseX, mouseY) < SnowDiamter[i]) {
+        snowY[i] =- 10;  // Reset the snowflake's Y position to the top
       }
     }
   }
